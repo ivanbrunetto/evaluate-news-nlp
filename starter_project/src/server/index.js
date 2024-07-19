@@ -1,29 +1,27 @@
 var path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
-const dotenv = require('dotenv');
-dotenv.config();
-
+const sentimentAnalyzer = require('./sentimentAnalyzer');
 const app = express();
 
 const cors = require('cors');
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('dist'));
 
 console.log(__dirname);
 
+//GET routes
 
-// Variables for url and api key
-
-
-/* app.get('/', function (req, res) {
-    res.sendFile('dist/index.html');
+// POST Routes
+app.post('/api', function (req, res) {
+    console.log(':: POST /api');
+    //console.log(req.body.txt);
+    sentimentAnalyzer.analyze(req.body.txt)
+    .then(aResult => res.send(aResult));
 });
- */
-
-// POST Route
 
 
 
