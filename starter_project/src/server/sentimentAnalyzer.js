@@ -1,7 +1,7 @@
-require('dotenv').config();
+import dotenv from 'dotenv';
+dotenv.config();
 
-
-const analyze = async (text) => {
+const analyzeSentiment = async (text) => {
     const formdata = new FormData();
     formdata.append('key', process.env.key);
     formdata.append('txt', text);
@@ -16,20 +16,42 @@ const analyze = async (text) => {
     const url = 'https://api.meaningcloud.com/sentiment-2.1';
     
     try {
-        //const response = await fetch(url, requestOptions);
-        //const status = response.status;
-        //const body = await response.json();
-        //return body;
+        console.log(`fetch ${url}`);
+        const response = await fetch(url, requestOptions);
+        const status = response.status;
+        const body = await response.json();
+                
+        if (!status) {
+            throw new Error(`cannot call meaningcloud status=${status}`);
+        }
+
+        if (body.status.code != '0') {
+            console.log('Meaningcloud:', body);
+            throw new Error(`Problem with meaningcloud: ${body.status.msg}`);
+        }
+
+        console.log(`remaining credits: ${body.status.remaining_credits}`);
+        
+        return {
+            error: 0, 
+            message: 'Sentiment processed successfully',
+            data: body
+        };
 
         //for testing
-        return mockBody(); 
+        //return mockBody(); 
 
-    } catch(error) {
-        console.log('error', error);
+    } catch(err) {
+        console.log(err);
+        return {
+            error: 1, 
+            message: err.message,
+            data: null
+        };
     }
 }
 
-exports.analyze = analyze;
+export { analyzeSentiment as default };
 
 //analyze('This is a simple text')
 //.then (result => console.log(result));
