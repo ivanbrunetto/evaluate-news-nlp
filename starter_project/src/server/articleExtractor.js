@@ -5,6 +5,10 @@ const extractArticle = async (url) => {
     setSanitizeHtmlOptions({ allowedAttributes: {}, allowedTags: []});
     try {
         const data = await extract(url);
+        if (!data) {
+          throw new Error (`nothing to extract from ${url}`);
+        }
+
         return {
           error: 0,
           message: 'article has been extracted successfully',
