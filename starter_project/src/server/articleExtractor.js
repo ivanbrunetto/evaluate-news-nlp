@@ -1,10 +1,11 @@
 
 import { extract, setSanitizeHtmlOptions } from '@extractus/article-extractor';
 
-const extractArticle = async (url) => {
+async function extractArticle(url) {
     setSanitizeHtmlOptions({ allowedAttributes: {}, allowedTags: []});
     try {
-        const data = await extract(url);
+      console.log(`extract(${url})`);  
+      const data = await extract(url);
         if (!data) {
           throw new Error (`nothing to extract from ${url}`);
         }
@@ -15,9 +16,10 @@ const extractArticle = async (url) => {
           data
         };
       } catch (err) {
+        console.log(err.message);
         return {
           error: 1,
-          message: err.message,
+          message: `Could not extract article from "${url}": ${err.message}`,
           data: null,
         };
       }

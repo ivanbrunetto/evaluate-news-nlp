@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-const analyzeSentiment = async (text) => {
+async function analyzeSentiment(text) {
     const formdata = new FormData();
     formdata.append('key', process.env.key);
     formdata.append('txt', text);
@@ -18,31 +18,30 @@ const analyzeSentiment = async (text) => {
     try {
         console.log(`fetch ${url}`);
         const response = await fetch(url, requestOptions);
-        const status = response.status;
-        const body = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(`Meaningcloud error: response status: ${response.status}`);
+        }
+        
+        const json = await response.json();
                 
-        if (!status) {
-            throw new Error(`cannot call meaningcloud status=${status}`);
+        if (json.status.code != '0') {
+            throw new Error(`Meaningcloud error: ${json.status.msg}`);
         }
 
-        if (body.status.code != '0') {
-            console.log('Meaningcloud:', body);
-            throw new Error(`Problem with meaningcloud: ${body.status.msg}`);
-        }
-
-        console.log(`remaining credits: ${body.status.remaining_credits}`);
+        console.log(`remaining credits: ${json.status.remaining_credits}`);
         
         return {
             error: 0, 
             message: 'Sentiment processed successfully',
-            data: body
+            data: json
         };
 
         //for testing
         //return mockBody(); 
 
     } catch(err) {
-        console.log(err);
+        console.log(err.message);
         return {
             error: 1, 
             message: err.message,
