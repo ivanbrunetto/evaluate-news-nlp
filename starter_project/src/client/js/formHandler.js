@@ -1,7 +1,3 @@
-// Replace checkForName with a function that checks the URL
-import { isValidUrl } from './inputChecker';
-import { fetchEvaluate } from './fetchEvaluate';
-
 export function handleSubmit(event) {
     event.preventDefault();
 
@@ -12,7 +8,7 @@ export function handleSubmit(event) {
     const inputText = document.getElementById('name').value;
 
     //send request to the server
-    fetchEvaluate(inputText, isValidUrl(inputText))
+    Client.fetchEvaluate(inputText, Client.isValidUrl(inputText))
     .then(response => {
         //console.log(response.data.score_tag);
         if (response.error) {

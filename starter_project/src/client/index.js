@@ -1,6 +1,7 @@
 // js files
 import { handleSubmit } from './js/formHandler';
-import { checkForName } from './js/inputChecker';
+import { isValidUrl } from './js/inputChecker';
+import { fetchEvaluate } from './js/fetchEvaluate';
 
 import './styles/resets.scss';
 import './styles/base.scss';
@@ -11,3 +12,8 @@ import './styles/footer.scss';
 document.getElementById('urlForm')
 .addEventListener('submit', handleSubmit);
 
+export { 
+    handleSubmit, 
+    isValidUrl, 
+    fetchEvaluate
+};
