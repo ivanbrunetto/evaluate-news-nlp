@@ -8,7 +8,6 @@ import './styles/header.scss';
 import './styles/form.scss';
 import './styles/footer.scss';
 
-//alert("I EXIST");
-// console.log("CHANGE!!");
+document.getElementById('urlForm')
+.addEventListener('submit', handleSubmit);
 
-// sass files
